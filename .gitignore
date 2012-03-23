@@ -1,0 +1,12 @@
+/build
+/install
+
+/ZPrimeBATTutorial/
+
+/.*waf*
+
+
+*.eps
+*.ps
+
+*.root
