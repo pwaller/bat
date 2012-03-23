@@ -4,6 +4,10 @@ from waflib.Configure import conf
 
 @conf
 def check_with(conf, check, what, *args, **kwargs):
+    """
+    Perform `check`, also looking at --with-X commandline option and
+    and X_HOME environment variable
+    """
     import os
     
     with_dir = getattr(conf.options, "with_" + what, None)
@@ -48,25 +52,30 @@ def options(opt):
 def configure(conf):
     conf.load('compiler_cxx')
     
-    conf.check_with(conf.check_cfg, "cern_root_system", path="root-config", args="--cflags --libs", package="")
-    conf.check_cxx(lib="Minuit", use=["CERN_ROOT_SYSTEM"], uselib_store="CERN_ROOT_SYSTEM")
+    conf.check_with(conf.check_cfg, "cern_root_system",
+                    path="root-config", args="--cflags --libs", package="")
+                    
+    conf.check_cxx(lib="Minuit", use=["CERN_ROOT_SYSTEM"],
+                   uselib_store="CERN_ROOT_SYSTEM")
     
     conf.check_with(conf.check_cxx, "bat", 
-                    stlib="BAT", 
+                    stlib="BAT",
                     header="BAT/BCModel.h", 
                     use=["CERN_ROOT_SYSTEM"])
     
-    conf.parse_flags("-I{0}".format(conf.path.find_node("ZPrimeBATTutorial/limits").abspath()), uselib="MTFA_INC")
-    conf.check_with(conf.check_cxx, "mtfa", header_name="BCMTFAnalysisFacility.h", use=["MTFA_INC"])
+    zpdir = conf.path.find_node("ZPrimeBATTutorial/limits")
+    conf.parse_flags("-I{0}".format(zpdir.abspath()), uselib="MTFA_INC")
+    conf.check_with(conf.check_cxx, "mtfa",
+                    header_name="BCMTFAnalysisFacility.h",
+                    use=["MTFA_INC"])
     
     conf.to_log("Final environment:")
     conf.to_log(conf.env)
     
 def build(bld):
     
-    bld.stlib(source=bld.path.ant_glob("ZPrimeBATTutorial/limits/BC*.cxx"), 
-              target="MTFA",
-              use=["BAT", "CERN_ROOT_SYSTEM", "MTFA_INC"])
+    bld.stlib(source=bld.path.ant_glob("ZPrimeBATTutorial/limits/BC*.cxx"),
+              target="MTFA", use=["BAT", "CERN_ROOT_SYSTEM", "MTFA_INC"])
 
     bld.program(
         source=bld.path.ant_glob("*.cxx"),
