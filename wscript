@@ -79,5 +79,5 @@ def build(bld):
 
     bld.program(
         source=bld.path.ant_glob("*.cxx"),
-        target="main",
+        target="diphoton2012-limitsetting",
         use=["BAT", "CERN_ROOT_SYSTEM", "MTFA"])
