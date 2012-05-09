@@ -212,7 +212,12 @@ int main(int argc, char ** argv){
   //double temp_mass[71];
   //  for(int ii=0;ii<71;ii++)   temp_mass[ii]= 0.45 + (ii*0.025); //New templates from Evan 
   //mass=temp_mass[iMass];
-  mass =  0.45+ (iMass*0.025);
+  
+  double lo = 400, hi = 3000;
+  int n = 200;
+  double delta = (hi - lo) / n;
+  //mass =  0.45+ (iMass*0.025);
+  mass = (lo + iMass*delta)*1e-3;
 
   TF1* accGG=0;
   //Aceptance vs mass parameterization for phootns
