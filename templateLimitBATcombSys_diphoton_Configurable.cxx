@@ -105,7 +105,7 @@ int main(int argc, char ** argv){
   BCAux::SetStyle();
 
   // remember old directory
-  TDirectory* f = gDirectory;
+  //TDirectory* f = gDirectory;
 
   //################################################################################################################################
   // ----------------------------------------------------
@@ -113,7 +113,7 @@ int main(int argc, char ** argv){
   // ----------------------------------------------------
   
   // Open Signal Templates#####################################
-  TFile * file_gg;
+  TFile * file_gg = NULL;
   if(configuration.SubString("IsoTemplate") =="IsoTemplate"){
     if(configuration.SubString("c0.1") =="c0.1"){
       if(configuration.SubString("B_K6") =="B_K6")
@@ -147,7 +147,7 @@ int main(int argc, char ** argv){
   file_gg->Close();
 
   // Get gg Background template#################################
-  TFile * file_gg_data;
+  TFile * file_gg_data = NULL;
 
   if(configuration.SubString("IsoTemplate") =="IsoTemplate"){
     if(configuration.SubString("B_K6") =="B_K6")
@@ -209,7 +209,7 @@ int main(int argc, char ** argv){
   // ----------------------------------------------------
   double mass = 0.;
   //double temp_mass[47]={ 0.2 , 0.25 , 0.3 , 0.35 , 0.4 , 0.45 , 0.5 , 0.55 , 0.6 , 0.65 , 0.7 , 0.75 , 0.8 , 0.85 , 0.9 , 0.95 , 1 , 1.05 , 1.1 , 1.15 , 1.2 , 1.25 , 1.3 , 1.35 , 1.4 , 1.45 , 1.5 , 1.55 , 1.6 , 1.65 , 1.7 , 1.75 , 1.8 , 1.85 , 1.9 , 1.95 , 2 , 2.05 , 2.1 , 2.15 , 2.2 , 2.25 , 2.3 , 2.35 , 2.4 , 2.45 , 2.5 };
-  double temp_mass[71];
+  //double temp_mass[71];
   //  for(int ii=0;ii<71;ii++)   temp_mass[ii]= 0.45 + (ii*0.025); //New templates from Evan 
   //mass=temp_mass[iMass];
   mass =  0.45+ (iMass*0.025);
