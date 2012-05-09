@@ -69,6 +69,8 @@ def configure(conf):
                     header_name="BCMTFAnalysisFacility.h",
                     use=["MTFA_INC"])
     
+    conf.env.append_value("CXXFLAGS", ["-g", "-O3", "-Werror", "-Wall"])
+    
     conf.to_log("Final environment:")
     conf.to_log(conf.env)
     
