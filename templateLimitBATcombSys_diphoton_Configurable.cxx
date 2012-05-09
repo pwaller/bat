@@ -216,8 +216,11 @@ int main(int argc, char ** argv){
 
   TF1* accGG=0;
   //Aceptance vs mass parameterization for phootns
-  accGG= new TF1("accEE","pol1",0.07,3);
-  accGG->SetParameters(0.527305 , 1.56236e-05 ); //new parameterization Note_v1  
+  //accGG= new TF1("accEE","pol1",0.07,3);
+  //accGG->SetParameters(0.527305 , 1.56236e-05 ); //new parameterization Note_v1  
+  
+  accGG= new TF1("accEE","pol6",0.07,3);
+  accGG->SetParameters(0.432917, 0.00037014, -5.25957e-7, 4.08001e-10, -1.55973e-13, 2.49557e-17, -9.40073e-22);
   
   double maxSigmaSig = 1;
 
