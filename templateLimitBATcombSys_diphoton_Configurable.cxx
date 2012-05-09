@@ -74,6 +74,8 @@ int main(int argc, char ** argv){
   if(configuration.SubString("B_K6") =="B_K6")
     lumiGG= 2116;
   
+  lumiGG = 4910; // Full 2011
+  
   cerr<<"doEnsemble: "<<doEnsemble<<"\n";
   cerr<<"nEnsemble: "<<nEnsemble<<"\n";
   cerr<<"iMass: "<< iMass <<"\n";
