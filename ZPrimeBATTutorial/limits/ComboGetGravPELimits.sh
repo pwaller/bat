@@ -1,0 +1,10 @@
+./templateLimitBATcombSys 0 1 20 0 1 1 1 0 1 1 0 1> combo_pe_output_0.txt
+./templateLimitBATcombSys 0 1 20 1 1 1 1 0 1 1 0 1> combo_pe_output_1.txt
+./templateLimitBATcombSys 0 1 20 2 1 1 1 0 1 1 0 1> combo_pe_output_2.txt
+./templateLimitBATcombSys 0 1 20 3 1 1 1 0 1 1 0 1> combo_pe_output_3.txt
+./templateLimitBATcombSys 0 1 20 4 1 1 1 0 1 1 0 1> combo_pe_output_4.txt
+./templateLimitBATcombSys 0 1 20 5 1 1 1 0 1 1 0 1> combo_pe_output_5.txt
+./templateLimitBATcombSys 0 1 20 6 1 1 1 0 1 1 0 1> combo_pe_output_6.txt
+./templateLimitBATcombSys 0 1 20 7 1 1 1 0 1 1 0 1> combo_pe_output_7.txt
+./templateLimitBATcombSys 0 1 20 8 1 1 1 0 1 1 0 1> combo_pe_output_8.txt
+./templateLimitBATcombSys 0 1 20 9 1 1 1 0 1 1 0 1> combo_pe_output_9.txt
