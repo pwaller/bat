@@ -16,7 +16,6 @@
 #include <TRandom3.h>
 #include <TFile.h>
 
-#include <assert.h>
 #include <sys/stat.h>
 #include <iostream>
 
@@ -566,8 +565,7 @@ int BCMTFAnalysisFacility::PerformSingleChannelAnalyses(const char* dirname, con
 	// ---- create new directory ---- //
 
 	mkdir(dirname, 0777);
-	int x = chdir(dirname);
-	assert(x >= 0);
+	chdir(dirname);
 
 	// ---- check options ---- // 
 
@@ -837,8 +835,7 @@ int BCMTFAnalysisFacility::PerformSingleChannelAnalyses(const char* dirname, con
 	
 	// ---- change directory ---- //
 
-	x = chdir("../");
-	assert(x >= 0);
+	chdir("../");
 
 	// no error
 	return 1;
@@ -850,8 +847,7 @@ int BCMTFAnalysisFacility::PerformSingleSystematicAnalyses(const char* dirname, 
 	// ---- create new directory ---- //
 
 	mkdir(dirname, 0777);
-	int x = chdir(dirname);
-	assert(x >= 0);
+	chdir(dirname);
 
 	// ---- check options ---- // 
 
@@ -1074,8 +1070,7 @@ int BCMTFAnalysisFacility::PerformSingleSystematicAnalyses(const char* dirname, 
 
 	// ---- change directory ---- //
 
-	x = chdir("../");
-	assert(x >= 0);
+	chdir("../");
 
 	// no error
 	return 1;	
@@ -1088,8 +1083,7 @@ int BCMTFAnalysisFacility::PerformCalibrationAnalysis(const char* dirname, std::
 	// ---- create new directory ---- //
 
 	mkdir(dirname, 0777);
-	int x = chdir(dirname);
-	assert(x >= 0);
+	chdir(dirname);
 
 	// ---- loop over parameter values and perform analysis  ---- // 
 
@@ -1119,8 +1113,7 @@ int BCMTFAnalysisFacility::PerformCalibrationAnalysis(const char* dirname, std::
 
 	// ---- change directory ---- //
 
-	x = chdir("../");
-	assert(x >= 0);
+	chdir("../");
 
 	// no error
 	return 1;

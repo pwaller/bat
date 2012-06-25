@@ -438,46 +438,45 @@ int main(int argc, char ** argv){
     mass=temp_mass[iMass];
   }
 
-  TF1* accEE=0;  // EPS values
+  TF1* accEE=0;  // MORIOND 2012 values (14-02)
   if (model==0){
     accEE= new TF1("accEE","pol6",0.07,3.07);
-    accEE->SetParameters(0.230274,1.26172,-1.49026,0.844042,-0.215362,0.013045,0.00194791);       // for cut at 130 GeV
+    accEE->SetParameters(0.236706,1.39965,-1.94607,1.48487,-0.630341,0.137358,-0.0119574);       // for cut at 130 GeV
   }
   else if (model==1){
-    accEE= new TF1("accEE","pol1",0.07,3.07);
-    accEE->SetParameters(0.701244,-0.0107504);
+    accEE= new TF1("accEE","pol6",0.07,3.07);
+    accEE->SetParameters(0.486522,1.00651,-1.68069,1.42207,-0.650057,0.151832,-0.0141897);       // for cut at 130 GeV
   }
 
-  TF1* accMM=0;  // EPS values
-  if (model==0){
+  TF1* accMM=0;  
+  if (model==0){// EPS values
     accMM= new TF1("accMM","pol6",0.07,3.07);
     accMM->SetParameters(0.248482,0.613077,-0.960227,0.774202,-0.339321,0.0756178,-0.00670578);   // for cut at 130 GeV
   }
-  else if (model==1){
-    accMM= new TF1("accMM","pol1",0.07,3.07);
-    accMM->SetParameters(0.455201,-0.0114039);
+  else if (model==1){ //MORIOND 2012 (08-02)
+    accMM= new TF1("accMM","pol6",0.07,3.07);
+    accMM->SetParameters(0.268196,0.682888,-1.12979,0.894101,-0.365342,0.0736522,-0.00577601);
   }
 
-  TF1* accML=0;  // Dummy values
-  if (model==0){
+  TF1* accML=0;
+  if (model==0){// EPS values
     accML= new TF1("accML","pol6",0.07,3.07);
     accML->SetParameters(0.248482,0.613077,-0.960227,0.774202,-0.339321,0.0756178,-0.00670578);   // for cut at 130 GeV
   }
-  else if (model==1){
-    accML= new TF1("accML","pol1",0.07,3.07);
-    accML->SetParameters(0.455201,-0.0114039);
+  else if (model==1){//MORIOND 2012 (08-02)
+    accML= new TF1("accML","pol6",0.07,3.07);
+    accML->SetParameters(0.000206709,0.214154,-0.409562,0.379482,-0.181595,0.0430318,-0.00399498);
   }
 
-  // EPS values for ee, mm; Dummy values for mL
+  // MORIOND (07(08)-02) values for ee,ml,mm;
   
   double zxsec = 0.98*989; // NNLO x-sec for m>70 GeV
-  double NZee = 2933.3;    // found Z->ee's - other backgrounds
-  double NZmm = 2696.5;    // found Z->mm's - other backgrounds
-  double NZmL = 269.65;    // found Z->mL's - other backgrounds
-  double Aee = 0.0034008;  // Acceptance from Zee inclusive sample
-  double Amm = 0.0026469;  // Acceptance from Zmm inclusive sample (3+3 st.)
-  double AmL = 0.0002646;  // Acceptance from Zmm inclusive sample (3+2 st.)
-
+  double NZee = 15102.9319995;    // found Z->ee's - other backgrounds
+  double NZmm = 10859.9;    // found Z->mm's - other backgrounds
+  double NZmL = 762.5;    // found Z->mL's - other backgrounds
+  double Aee = 0.0031806855843;  // Acceptance from Zee inclusive sample
+  double Amm = 0.00226511;  // Acceptance from Zmm inclusive sample (3+3 st.)
+  double AmL = 0.00020722;  // Acceptance from Zmm inclusive sample (3+2 st.)
 
   double maxSigmaSig = maxNsig * zxsec * Aee / ( NZee * accEE->Eval(mass) );
   cerr<<"mass:  "<<mass<<"\n";
