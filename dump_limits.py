@@ -109,7 +109,7 @@ def plot_data_limit(input_file):
     
     return g_excl_xs
 
-def make_theory_functions(theory_xs, kvalues=[0.01, 0.03, 0.05, 0.1, 0.15, 0.2]):
+def make_theory_functions(theory_xs, kvalues=[0.01, 0.03, 0.05, 0.1]): #, 0.2]):
     fs = []
     for k in kvalues:
         fnew = theory_xs.Clone()
@@ -237,7 +237,6 @@ def main():
         
     g_2sig, g_1sig, g_exptd = make_uncertaintyband(data)
     
-    c = R.TCanvas()
     
     # Expectation
     mg = R.TMultiGraph("excl", "")
@@ -251,12 +250,18 @@ def main():
     g_excl_xs = plot_data_limit("full_log_no_ensemble")
     mg.Add(g_excl_xs, "CP")
     
+    c = R.TCanvas("test", "test", 691, 520)
+    c.DrawFrame(0.1, 5e-4, 3, 2)
     c.SetLogy()
-    mg.Draw("A")
+    #mg.SetMaximum(3)
+    #mg.SetMinimum(5e-4)
+    mg.Draw()
+    c.Update()
     mg.GetXaxis().SetTitle("m_{G} [TeV]")
-    mg.GetYaxis().SetTitle("#sigma #times Br(G #rightarrow #gamma#gamma)")
-    mg.GetYaxis().SetRangeUser(1e-3, 1.1)
-    mg.Draw("A")
+    mg.GetYaxis().SetTitle("#sigma #times Br(G #rightarrow #gamma#gamma) [pb]")
+    #mg.GetYaxis().SetRangeUser(5e-4, 4)
+    #mg.Draw("A")
+    #wait()
         
     k_factor = "1.75*"
     
@@ -267,8 +272,8 @@ def main():
     base_km = 0.1
     # Parameterization obtained from fit
     theory_xs.SetParameters(2.49412e-04, -3.19858e+01, 2.31110e+00, 1.20494e+02, -5.99267e-03, base_km)
-    
-    logx = 1
+        
+    logx = 0
     if logx:
         c.SetLogx()
         mg.GetXaxis().SetRangeUser(0.370, 3.090)
@@ -303,7 +308,7 @@ def main():
         keep.append(label)
         #R.TLatex(
         
-    l = R.TLegend(0.572, 0.7, 0.81, 0.89)
+    l = R.TLegend(0.573, 0.7, 0.81, 0.89)
     l.SetLineColor(R.kWhite); l.SetFillColor(R.kWhite)
     l.SetTextFont(l.GetTextFont()+1)
     l.SetTextSize(18)
@@ -328,9 +333,9 @@ def main():
     keepalive = [l, text, text2]
     
     c.Update()
-    import IPython; IPython.embed()
+    #import IPython; IPython.embed()
     #wait()
-    return
+    #return
     
     c1 = R.TCanvas()
     
@@ -343,7 +348,7 @@ def main():
     g_1sig_plane = graph_to_theory_plane(theory_xs, g_1sig)
     mg_plane.Add(g_1sig_plane, "e3")
     g_exptd_plane = graph_to_theory_plane(theory_xs, g_exptd)
-    g_exptd_plane.SetMarkerStyle(7)
+    g_exptd_plane.ResetAttMarker()
     mg_plane.Add(g_exptd_plane, "CP")
     
     # Data
@@ -370,23 +375,31 @@ def main():
     l.AddEntry(g_2sig_plane, "Expected #pm 2#sigma", "f")
     l.Draw()
     
-    text = R.TLatex(0.11, 0.65, "#sqrt{s} = 7 TeV")
+    text = R.TLatex(0.14 + 0.042, 0.65, "#sqrt{s} = 7 TeV")
     text.SetTextFont(text.GetTextFont()+1)
     text.SetTextSize(18)
     text.SetNDC()
     text.Draw()
-    text2 = R.TLatex(0.11, 0.55, "#int L dt = 4.91 fb^{-1}")
+    text2 = R.TLatex(0.14, 0.55, "#int L dt = 4.91 fb^{-1}")
     text2.SetTextFont(text2.GetTextFont()+1)
     text2.SetTextSize(18)
     text2.SetNDC()
     text2.Draw()
     
-    mg_plane.GetYaxis().SetTitleOffset(mg_plane.GetYaxis().GetTitleOffset()*1.1)
+    mg_plane.GetYaxis().SetTitleOffset(mg_plane.GetYaxis().GetTitleOffset()*1.15)
     
+    c.SetTicks(1, 1)
+    c1.SetTicks(1, 1)
+    
+    c.RedrawAxis()
     c.Modified()
     c.Update()
+    c1.RedrawAxis()
     c1.Modified()
     c1.Update()
+    
+    c.SaveAs("xsbr_limit.eps")
+    c1.SaveAs("km_m_plane_limit.eps")
     
     fs = []
             
