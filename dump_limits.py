@@ -22,7 +22,7 @@ import ROOT as R
 def mkarray(data): return array('d', data)
 
 def get_mass(i):
-    lo, hi, n = 400, 3000, 200
+    lo, hi, n = 0.4, 3, 200
     delta = (hi-lo)/n
     return lo + delta*i
 
@@ -95,7 +95,7 @@ def plot_data_limit(input_file):
     content = [x[1:] for x in content if x[0] == "limit"]
 
     data = [map(float, x) for x in content]
-    data = [(mass*1000, x) for mass, x in data]
+    data = [(mass, x) for mass, x in data]
     data.sort()
         
     xs, ys = map(mkarray, zip(*data))
@@ -148,7 +148,7 @@ def get_values_in_plane(theory_xs, graph):
         return km
     
     data = [(mass, compute_km_theoryintersect_at_mass(spline.Eval, mass))
-            for mass in NP.linspace(400, 3000, 200)]
+            for mass in NP.linspace(0.4, 3, 200)]
     return data
 
 def graph_set_points(g, data):        
@@ -259,8 +259,9 @@ def main():
     mg.Draw("A")
         
     k_factor = "1.75*"
-    theory_xs = R.TF1("powerlaw", k_factor + "[0]*x^([1]+[2]*log(x))*expo(3)*([5]/0.03)^2", 100, 3000)
-    theory_xs.SetLineColor(R.kRed)
+    
+    theory_xs = R.TF1("powerlaw", k_factor + "[0]*(x*1000)^([1]+[2]*log(x*1000))*exp([3]+[4]*x*1000)*([5]/0.03)^2", 0.100, 3)
+    theory_xs.SetLineColor(R.kAzure - 3)
     theory_xs.SetLineWidth(1)
         
     base_km = 0.1
@@ -270,8 +271,12 @@ def main():
     logx = 1
     if logx:
         c.SetLogx()
-        mg.GetXaxis().SetRangeUser(370, 3090)
+        mg.GetXaxis().SetRangeUser(0.370, 3.090)
         mg.GetXaxis().SetMoreLogLabels()
+        mg.GetXaxis().SetNoExponent()
+    else:
+        mg.GetXaxis().SetRangeUser(0, 3.)
+        mg.GetYaxis().SetRangeUser(5e-4, 4)
         
     c.Modified(); c.Update()
     thfuncs = make_theory_functions(theory_xs)
@@ -281,7 +286,7 @@ def main():
         constrain_function(f)
         f.SetNpx(300)
         f.Draw("same")
-        label_xpos = bisect(lambda x: f.Eval(x) - label_ypos, 0, 1e4)
+        label_xpos = bisect(lambda x: f.Eval(x) - label_ypos, 0, 4)
         label = R.TLatex(label_xpos, label_ypos, "k/#bar{M}_{pl} = %s" % (f.GetParameter(5)))
         label.SetTextFont(label.GetTextFont()+1)
         label.SetTextSize(16)
@@ -346,10 +351,13 @@ def main():
     mg_plane.Add(g_excl_plane, "CP")
     
     mg_plane.Draw("A")
-    mg_plane.GetXaxis().SetRangeUser(350, 2500)
+    mg_plane.GetXaxis().SetRangeUser(0.350, 2.450)
     mg_plane.GetYaxis().SetRangeUser(1e-3, 0.2)
+    mg_plane.GetXaxis().SetRangeUser(0.5, 2.450)
+    mg_plane.GetYaxis().SetRangeUser(1e-3, 0.1)
     mg_plane.GetXaxis().SetTitle("m_{G} [TeV]")
     mg_plane.GetYaxis().SetTitle("k/#bar{M}_{pl}")
+    mg_plane.GetYaxis().SetDecimals()
     mg_plane.Draw("A")
     
     l = R.TLegend(0.11, 0.7, 0.48, 0.89)
