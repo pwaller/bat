@@ -14,3 +14,11 @@
 /junk
 
 /*.txt
+
+*~
+
+*.pyc
+
+/output*/
+
+/log_*
