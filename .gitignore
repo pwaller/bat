@@ -22,3 +22,6 @@
 /output*/
 
 /log_*
+
+/bin/
+/scripts/

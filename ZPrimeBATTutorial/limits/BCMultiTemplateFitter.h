@@ -94,13 +94,13 @@ class BCMultiTemplateFitter : public BCModel
 		int PrintSummary(const char* filename = "summary.txt"); 
 
 		// return expectation value for a channel and bin
-		double Expectation(int channelindex, int binindex, std::vector<double>& parameters); 
+		double Expectation(int channelindex, int binindex, const std::vector<double>& parameters); 
 
 		// return efficiency for a channel, process and bin
-		double Efficiency(int channelindex, int processindex, int binindex, std::vector<double>& parameters); 
+		double Efficiency(int channelindex, int processindex, int binindex, const std::vector<double>& parameters); 
 		
 		// return probability for a channel, process and bin
-		double Probability(int channelindex, int processindex, int binindex, std::vector<double>& parameters); 
+		double Probability(int channelindex, int processindex, int binindex, const std::vector<double>& parameters); 
 
 		// print stack
 		int PrintStack(int channelindex, std::vector<double> parameters, const char* filename = "stack.eps", const char* options = "");
@@ -123,7 +123,7 @@ class BCMultiTemplateFitter : public BCModel
 		// BAT
 
 		// the log likelihood
-		double LogLikelihood(std::vector <double> parameters);
+		double LogLikelihood(const std::vector<double>& parameters);
 
     // void MCMCIterationInterface(); 
 

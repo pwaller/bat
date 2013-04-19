@@ -10,6 +10,7 @@ mass, xs = RooRealVar("mass", "mass", *massbounds), RooRealVar("xs", "xs", *xsbo
 
 ds = RooDataSet("data", "data", RooArgSet(mass, xs), RooFit.StoreError(RooArgSet(xs)))
 
+# These numbers come from Pythia 8.
 data = [
  #(100, (238656.80456246276, 5021.139940690172)),
  #(200, (4256.158341494928, 212.77361569648355)),

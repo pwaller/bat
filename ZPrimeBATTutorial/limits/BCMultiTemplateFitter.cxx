@@ -466,7 +466,7 @@ int BCMultiTemplateFitter::PrintSummary(const char* filename)
 }
 
 // ---------------------------------------------------------
-double BCMultiTemplateFitter::Expectation(int channelindex, int binindex, std::vector<double>& parameters)
+double BCMultiTemplateFitter::Expectation(int channelindex, int binindex, const std::vector<double>& parameters)
 {
 	double expectation = 0.;
 
@@ -495,7 +495,7 @@ double BCMultiTemplateFitter::Expectation(int channelindex, int binindex, std::v
 }
 
 // ---------------------------------------------------------
-double BCMultiTemplateFitter::Efficiency(int channelindex, int processindex, int binindex, std::vector<double>& parameters)
+double BCMultiTemplateFitter::Efficiency(int channelindex, int processindex, int binindex, const std::vector<double>& parameters)
 {
 	// get channel
 	BCChannel* channel = fChannelContainer[channelindex];
@@ -543,7 +543,7 @@ double BCMultiTemplateFitter::Efficiency(int channelindex, int processindex, int
 }
 
 // ---------------------------------------------------------
-double BCMultiTemplateFitter::Probability(int channelindex, int processindex, int binindex, std::vector<double>& parameters)
+double BCMultiTemplateFitter::Probability(int channelindex, int processindex, int binindex, const std::vector<double>& parameters)
 {
 	// get histogram
 	TH1D* hist = fChannelContainer[channelindex]->GetTemplate(processindex)->GetHistogram();
@@ -802,7 +802,7 @@ double BCMultiTemplateFitter::CalculateCash(std::vector<double> parameters)
 }
 
 // ---------------------------------------------------------
-double BCMultiTemplateFitter::LogLikelihood(std::vector<double> parameters)
+double BCMultiTemplateFitter::LogLikelihood(const std::vector<double>& parameters)
 {
 	double logprob = 0.;
 	

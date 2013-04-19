@@ -109,7 +109,7 @@ def plot_data_limit(input_file):
     
     return g_excl_xs
 
-def make_theory_functions(theory_xs, kvalues=[0.01, 0.03, 0.05, 0.1]): #, 0.2]):
+def make_theory_functions(theory_xs, kvalues=[1e-5, 1e-4, 1e-3, 0.01, 0.03, 0.05, 0.1]): #, 0.2]):
     fs = []
     for k in kvalues:
         fnew = theory_xs.Clone()
@@ -126,9 +126,11 @@ def constrain_function(fn):
     lo, hi = R.gPad.GetUymin(), R.gPad.GetUymax()
     if R.gPad.GetLogy():
         lo, hi = 10**lo, 10**hi
+        
+    loxbefore, hixbefore = R.gPad.GetUxmin(), R.gPad.GetUxmax()
     
-    lox = bisect(lambda x: fn(x) - lo, 0, 1e4)
-    hix = bisect(lambda x: fn(x) - hi, 0, 1e4)
+    lox = bisect(lambda x: fn(x) - lo, loxbefore, hixbefore)
+    hix = bisect(lambda x: fn(x) - hi, loxbefore, hixbefore)
     if lox > hix:
         lox, hix = hix, lox
     #d = (hix - lox) / 10
@@ -136,12 +138,12 @@ def constrain_function(fn):
     #hix -= d
     fn.SetRange(lox, hix)
 
-def get_values_in_plane(theory_xs, graph):
+def get_values_in_plane(theory_xs, graph, multiplier=1):
     spline = R.TSpline5("spline", graph)
     base_km = theory_xs.GetParameter(5)
     
     def compute_km_theoryintersect_at_mass(measured_xs, mass):
-        measured_point = measured_xs(mass)
+        measured_point = measured_xs(mass) / multiplier
         theory_point = theory_xs.Eval(mass)
         if measured_point < 0: return 0
         km = base_km * sqrt(measured_point / theory_point)
@@ -156,17 +158,17 @@ def graph_set_points(g, data):
     for i, (x, y) in enumerate(data):
         g.SetPoint(i, x, y)
 
-def graph_to_theory_plane(theory_xs, g):
+def graph_to_theory_plane(theory_xs, g, multiplier=1):
     if isinstance(g, R.TGraphAsymmErrors):
         g1, g2 = split_asym_graph_errors(g)        
-        graph_set_points(g1, get_values_in_plane(theory_xs, g1))
-        graph_set_points(g2, get_values_in_plane(theory_xs, g2))
+        graph_set_points(g1, get_values_in_plane(theory_xs, g1, multiplier))
+        graph_set_points(g2, get_values_in_plane(theory_xs, g2, multiplier))
         new_g = g.Clone()
         asym_graph_from_split(new_g, g1, g2)
         return new_g
     
     new_g = g.Clone()    
-    values = get_values_in_plane(theory_xs, g)
+    values = get_values_in_plane(theory_xs, g, multiplier)
     new_g.Set(len(values))
     for i, (x, y) in enumerate(values):
         new_g.SetPoint(i, x, y)
@@ -280,6 +282,7 @@ def main():
         mg.GetXaxis().SetMoreLogLabels()
         mg.GetXaxis().SetNoExponent()
     else:
+        c.SetLogx()
         mg.GetXaxis().SetRangeUser(0, 3.)
         mg.GetYaxis().SetRangeUser(5e-4, 4)
         
@@ -288,7 +291,7 @@ def main():
     keep = []
     label_ypos = 3e-2
     for f in thfuncs:
-        constrain_function(f)
+        #constrain_function(f)
         f.SetNpx(300)
         f.Draw("same")
         label_xpos = bisect(lambda x: f.Eval(x) - label_ypos, 0, 4)
@@ -351,6 +354,22 @@ def main():
     g_exptd_plane.ResetAttMarker()
     mg_plane.Add(g_exptd_plane, "CP")
     
+    
+    g_exptd_plane2010 = graph_to_theory_plane(theory_xs, g_exptd, 36. / 4910); g_exptd_plane2010.ResetAttMarker()
+    mg_plane.Add(g_exptd_plane2010, "CP")
+    
+    g_exptd_planeprevx = graph_to_theory_plane(theory_xs, g_exptd, 2120 / 4910.); g_exptd_planeprevx.ResetAttMarker()
+    mg_plane.Add(g_exptd_planeprevx, "CP")
+    
+    g_exptd_plane2x = graph_to_theory_plane(theory_xs, g_exptd, 2); g_exptd_plane2x.ResetAttMarker()
+    mg_plane.Add(g_exptd_plane2x, "CP")
+    
+    g_exptd_plane10x = graph_to_theory_plane(theory_xs, g_exptd, 10); g_exptd_plane10x.ResetAttMarker()
+    mg_plane.Add(g_exptd_plane10x, "CP")
+    
+    g_exptd_plane100x = graph_to_theory_plane(theory_xs, g_exptd, 100); g_exptd_plane100x.ResetAttMarker()
+    mg_plane.Add(g_exptd_plane100x, "CP")
+    
     # Data
     g_excl_plane = graph_to_theory_plane(theory_xs, g_excl_xs)
     mg_plane.Add(g_excl_plane, "CP")
@@ -358,8 +377,10 @@ def main():
     mg_plane.Draw("A")
     mg_plane.GetXaxis().SetRangeUser(0.350, 2.450)
     mg_plane.GetYaxis().SetRangeUser(1e-3, 0.2)
-    mg_plane.GetXaxis().SetRangeUser(0.5, 2.450)
-    mg_plane.GetYaxis().SetRangeUser(1e-3, 0.1)
+    #mg_plane.GetXaxis().SetRangeUser(0.5, 2.450)
+    mg_plane.GetXaxis().SetRangeUser(0.1, 3)
+    #mg_plane.GetYaxis().SetRangeUser(1e-3, 0.1)
+    mg_plane.GetYaxis().SetRangeUser(1e-3, 0.8)
     mg_plane.GetXaxis().SetTitle("m_{G} [TeV]")
     mg_plane.GetYaxis().SetTitle("k/#bar{M}_{pl}")
     mg_plane.GetYaxis().SetDecimals()
@@ -388,6 +409,25 @@ def main():
     
     mg_plane.GetYaxis().SetTitleOffset(mg_plane.GetYaxis().GetTitleOffset()*1.15)
     
+    j_11 = 3.8317059702075
+    
+    limit_from_lambda = R.TF1("lfroml", "x / (10 * {0})".format(j_11), 0, 3000)
+    limit_from_lambda.Draw("same")
+    
+    
+    d0limit = [(0.300, 0.005), (0.400, 0.006), (0.500, 0.008), (0.700, 0.016),
+               (0.800, 0.025), (0.900, 0.0405), (1.000, 0.071), (1.040, 0.094),
+               (1.050, 0.1),]
+
+    limit_from_dzero = R.TF1("fn", "[0]*exp([1]*x^[2])", 0, 3)
+    
+    # From fit to d0limit, it isn't perfect but will do
+    limit_from_dzero.SetParameters(0.0035343549295618732, 3.0264256730202219, 2.0204)
+    c1.Update()
+    #constrain_function(limit_from_dzero)
+    limit_from_dzero.Draw("same")
+
+
     c.SetTicks(1, 1)
     c1.SetTicks(1, 1)
     

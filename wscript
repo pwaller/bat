@@ -47,9 +47,10 @@ def configure(conf):
                     header_name="BCMTFAnalysisFacility.h",
                     use=["MTFA_INC"])
     
-    conf.env.append_value("CXXFLAGS", ["-g", "-O2", "-Werror", "-Wall"])
+    conf.env.append_value("CXXFLAGS", ["-g", "-O2", "-Werror", "-Wall", "-pthread"])
+    conf.env.append_value("LINKFLAGS", ["-pthread"])
     
-    conf.env.append_value("STLIB", ["pthread", "m", "c"])
+    conf.env.append_value("STLIB", ["m", "c"])
     
     if conf.options.fully_static:
         #conf.env.SHLIB_MARKER = '-Wl,-Bstatic'
